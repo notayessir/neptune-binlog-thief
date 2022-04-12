@@ -16,7 +16,7 @@
 
 下载压缩包并解压：
 
-
+https://github.com/notayessir/neptune-binlog-thief/releases/download/neptune-binlog-thief-0.0.1-beta/neptune-binlog-thief-0.0.1-beta.zip
 
 ### 配置
 
@@ -53,6 +53,142 @@ sh command.sh binlog-service stop
 Windows：
 
 TODO
+
+### 示例
+
+```mysql
+mysql> INSERT INTO `binlog_data`.`t_user` (`name`, `age`, `birth_date`, `sex`, `height`) VALUES ('jack', 30, '2022-04-13 00:38:42', 'female', 80.3)
+JSON: 
+{
+    "data":{
+        "name":"jack",
+        "id":4,
+        "age":30,
+        "birth_date":1649781522000,
+        "sex":"female",
+        "height":80.3
+    },
+    "eventHeader":{
+        "eventSize":68,
+        "eventType":30,
+        "flags":0,
+        "logPos":436131,
+        "serverId":1,
+        "timestamp":1649781540
+    },
+    "packetHeader":{
+        "payloadLength":69,
+        "sequenceId":7
+    },
+    "packetType":"WRITE_ROWS_EVENTv2",
+    "tableMap":{
+        "columnDefs":[
+            {
+                "columnType":"MYSQL_TYPE_LONGLONG",
+                "metadata":"",
+                "nullable":false,
+                "pos":0
+            },
+            {
+                "columnType":"MYSQL_TYPE_VARCHAR",
+                "metadata":"/QI=",
+                "nullable":true,
+                "pos":1
+            },
+            {
+                "columnType":"MYSQL_TYPE_LONG",
+                "metadata":"",
+                "nullable":true,
+                "pos":2
+            },
+            {
+                "columnType":"MYSQL_TYPE_DATETIME2",
+                "metadata":"AA==",
+                "nullable":true,
+                "pos":3
+            },
+            {
+                "columnType":"MYSQL_TYPE_STRING",
+                "metadata":"9wE=",
+                "nullable":true,
+                "pos":4
+            },
+            {
+                "columnType":"MYSQL_TYPE_DOUBLE",
+                "metadata":"CA==",
+                "nullable":true,
+                "pos":5
+            }
+        ],
+        "schemaName":"binlog_data",
+        "tableId":256,
+        "tableName":"t_user"
+    },
+    "xid":42798
+}
+mysql> UPDATE `binlog_data`.`t_user` SET `name` = 'jason', `sex` = 'male', `height` = 90 WHERE `id` = 4
+JSON: 
+{
+    "data":{
+        "name":"jason",
+        "id":4,
+        "age":30,
+        "birth_date":1649781522000,
+        "sex":"male",
+        "height":90
+    },
+    "eventHeader":{
+        "eventSize":103,
+        "eventType":31,
+        "flags":0,
+        "logPos":436628,
+        "serverId":1,
+        "timestamp":1649781707
+    },
+    "oldData":{
+        "name":"jack",
+        "id":4,
+        "age":30,
+        "birth_date":1649781522000,
+        "sex":"female",
+        "height":80.3
+    },
+    "packetHeader":{
+        "payloadLength":104,
+        "sequenceId":13
+    },
+    "packetType":"UPDATE_ROWS_EVENTv2",
+    "tableMap": // ignore
+    "xid":42803
+}
+mysql> DELETE FROM `binlog_data`.`t_user` WHERE `id` = 4
+JSON：
+{
+    "data":{
+        "name":"jason",
+        "id":4,
+        "age":30,
+        "birth_date":1649781522000,
+        "sex":"male",
+        "height":90
+    },
+    "eventHeader":{
+        "eventSize":69,
+        "eventType":32,
+        "flags":0,
+        "logPos":437035,
+        "serverId":1,
+        "timestamp":1649781780
+    },
+    "packetHeader":{
+        "payloadLength":70,
+        "sequenceId":19
+    },
+    "packetType":"DELETE_ROWS_EVENTv2",
+    "tableMap": // ignore
+    "xid":42806
+}
+```
 
 ## 更多配置
 
