@@ -1,6 +1,6 @@
 ## 介绍
 
-![architecture](/Users/nuc/Desktop/architecture.png)
+![architecture](https://github.com/notayessir/neptune-binlog-thief/blob/master/asset/architecture.png)
 
 增量订阅 MySQL binlog 日志，并将事件生产到常用的中间件；基于 Java 8，MySQL 版本 >= 5.7；
 
@@ -23,8 +23,8 @@
 创建 MySQL 账号并授权：
 
 ```mysql
-mysql> CREATE USER 'binlog_thief'@'%' IDENTIFIED BY 'XXXXXX';
-mysql> CREATE USER 'binlog_thief'@'localhost' IDENTIFIED BY 'XXXXXX';
+mysql> CREATE USER 'binlog_thief'@'%' IDENTIFIED WITH mysql_native_password BY '<password>';
+mysql> CREATE USER 'binlog_thief'@'localhost' IDENTIFIED WITH mysql_native_password BY '<password>';
 mysql> GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO 'binlog_thief'@'%';
 mysql> GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO 'binlog_thief'@'localhost';
 ```
