@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>neptune-binlog-thief</artifactId>
+        <groupId>com.notayessir</groupId>
+        <version>0.0.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>neptune-binlog-thief-processor</artifactId>
+
+    <properties>
+        <spring-data-jdbc.ver>2.3.1</spring-data-jdbc.ver>
+        <mysql-connector-java.ver>8.0.27</mysql-connector-java.ver>
+        <HikariCP.ver>4.0.3</HikariCP.ver>
+        <disruptor.ver>3.4.4</disruptor.ver>
+        <redis-client.ver>2.6.2</redis-client.ver>
+        <lettuce-core.ver>6.1.6.RELEASE</lettuce-core.ver>
+        <neptune-deliverer-common.ver>0.0.1</neptune-deliverer-common.ver>
+    </properties>
+
+    <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${HikariCP.ver}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jdbc -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jdbc</artifactId>
+            <version>${spring-data-jdbc.ver}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.ver}</version>
+        </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>com.notayessir</groupId>-->
+        <!--            <artifactId>neptune-deliverer-common</artifactId>-->
+        <!--            <version>${neptune-deliverer-common.ver}</version>-->
+        <!--        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/com.lmax/disruptor -->
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>${disruptor.ver}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+            <version>${lettuce-core.ver}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-client -->
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+            <version>4.9.3</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.notayessir</groupId>
+            <artifactId>neptune-binlog-thief-ha</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+
+
+    </dependencies>
+
+</project>
