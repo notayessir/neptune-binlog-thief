@@ -214,7 +214,16 @@ app.binlog.filename=binlog.000028
 app.binlog.start.pos=426321
 ```
 
-### Kafka
+### 生产者
+
+生产者目前支持 4 种，只能从中选取一个配置，其他需要置为空：
+
+- LOG：仅打印，调试用，无需配置任何生产者信息；
+- Kafka：生产到 Kafka；
+- Rocket MQ：生产到 Rocket MQ；
+- Redis：生产到 Redis；
+
+#### Kafka
 
 ```
 # Kafka 主题前缀，例如 packetType=WRITE_ROWS_EVENTv2，推送到 Kafka 的主题为 xxxWRITE_ROWS_EVENTv2
@@ -223,7 +232,7 @@ app.producer.kafka.topic.prefix=
 #app.producer.kafka.nameserver=211.72.207.131:9092
 ```
 
-### Rocket MQ
+#### Rocket MQ
 
 ```
 # mq 主题
@@ -232,7 +241,7 @@ app.producer.rocketmq.topic=Neptune-Deliverer-Binlog
 app.producer.rocketmq.nameserver=localhost:9876
 ```
 
-### Redis
+#### Redis
 
 ```
 # Redis 直连 host
