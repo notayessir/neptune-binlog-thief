@@ -20,7 +20,7 @@ fi
 
 start(){
 	stop
-	nohup java -jar ../src/neptune-binlog-thief-bootstrap-0.0.1-exec.jar ${node} \
+	nohup java -jar -Xmx4g -XX:+UseG1GC ../src/neptune-binlog-thief-bootstrap-0.0.1-exec.jar ${node} \
 	--server.port=$port --spring.config.location=../config/application.properties > ../log/app.log 2>&1 &
 	echo $! > ./${node}_pid.file
 }
