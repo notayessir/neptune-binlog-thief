@@ -64,6 +64,23 @@ public class BinlogEvent {
         this.oldData = oldData;
     }
 
+
+    /**
+     * 释放引用关系，方便垃圾回收
+     */
+    public void clear(){
+        xid = null;
+        database = null;
+        query = null;
+        packetType = null;
+        tableMap = null;
+        data = null;
+        oldData = null;
+        packetHeader = null;
+        eventHeader = null;
+    }
+
+
     public Long getXid() {
         return xid;
     }

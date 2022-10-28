@@ -16,6 +16,7 @@ public class LogProducer implements EventHandler<BinlogEvent>{
 
     public void onEvent(BinlogEvent event, long sequence, boolean endOfBatch) throws Exception {
         LOG.info(JSONObject.toJSONString(event));
+        event.clear();
     }
 
 }

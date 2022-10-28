@@ -52,22 +52,22 @@ public class RocketMQProducer implements EventHandler<BinlogEvent> {
 
     }
 
-    private final List<Message> messages = new ArrayList<>(256);
+//    private final List<Message> messages = new ArrayList<>(256);
 
     public void onEvent(BinlogEvent event, long sequence, boolean endOfBatch) throws Exception {
-        if (!endOfBatch){
-            messages.add(buildMessage(event));
-            return;
-        } else {
-            messages.add(buildMessage(event));
-        }
+//        if (!endOfBatch){
+//            messages.add(buildMessage(event));
+//            return;
+//        } else {
+//            messages.add(buildMessage(event));
+//        }
         try {
-            producer.send(messages);
+            Message message = buildMessage(event);
+            producer.send(message);
+            event.clear();
         } catch (Exception e){
             LOG.error("fail to push message to rocket mq, msg : {}", JSONObject.toJSONString(event), e);
             e.printStackTrace();
-        } finally {
-            messages.clear();
         }
 
     }

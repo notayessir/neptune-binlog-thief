@@ -57,25 +57,14 @@ public class RedisProducer implements EventHandler<BinlogEvent> {
     }
 
 
-    private final List<String> events = new ArrayList<>(256);
-
-
     public void onEvent(BinlogEvent event, long sequence, boolean endOfBatch) throws Exception {
-        if (!endOfBatch){
-            events.add(JSONObject.toJSONString(event));
-            return;
-        } else {
-            events.add(JSONObject.toJSONString(event));
-        }
-        String[] array = events.toArray(new String[0]);
         try {
-            RedisFuture<Long> future = commander.lpush(event.getPacketType().name(), array);
+            RedisFuture<Long> future = commander.lpush(event.getPacketType().name(), JSONObject.toJSONString(event));
             Long result = future.get();
+            event.clear();
         }catch (Exception e){
             LOG.error("fail to push message to redis, msg : {}", JSONObject.toJSONString(event), e);
             e.printStackTrace();
-        } finally {
-            events.clear();
         }
 
 

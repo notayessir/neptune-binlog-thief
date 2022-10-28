@@ -70,6 +70,7 @@ public class KafkaMQProducer implements EventHandler<BinlogEvent> {
         try {
             Future<RecordMetadata> sendResult =  producer.send(record);
             RecordMetadata metadata = sendResult.get();
+            event.clear();
 //            LOG.info("sent record(key={} value={}) meta(partition={}, offset={}) time={}",
 //                    record.key(), record.value(), metadata.partition(), metadata.offset(), timestamp);
         }catch (Exception e){
