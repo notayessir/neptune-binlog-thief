@@ -3,6 +3,9 @@ package com.notayessir.common.packet;
 
 import com.notayessir.common.util.ByteUtil;
 
+/**
+ * 请求主节点发送 binlog 事件
+ */
 public class BinlogDumpPacket extends Packet implements Computable {
 
     private byte binlogDump;

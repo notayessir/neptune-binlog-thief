@@ -11,7 +11,7 @@ public class QueryEventMessenger {
 
     private volatile boolean alert;
 
-    private static final Queue<String> queue = new ArrayDeque<>(8);
+    private static final Queue<String> queue = new ArrayDeque<>();
 
 
     public void pushMessage(String database){

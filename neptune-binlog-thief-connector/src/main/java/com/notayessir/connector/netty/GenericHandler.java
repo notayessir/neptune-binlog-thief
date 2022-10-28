@@ -73,6 +73,12 @@ public class GenericHandler extends ChannelInboundHandlerAdapter {
         Packet packet = (Packet) msg;
         PacketType packetType = packet.getPacketType();
         switch (packetType){
+            case HANDSHAKE_REQ_PACKET:  // #1，服务端握手
+                handleHandshakeReqPacket(msg, ctx);
+                break;
+            case GENERIC_OK_PACKET:     // #2，服务端响应
+                handleOKPacket(msg, ctx);
+                break;
             case AUTH_SWITCH_REQ_PACKET:
                 handleAuthSwitchReqPacket(msg, ctx);
                 break;
@@ -81,12 +87,6 @@ public class GenericHandler extends ChannelInboundHandlerAdapter {
                 break;
             case GENERIC_ERR_PACKET:
                 handleERRPacket(msg, ctx);
-                break;
-            case HANDSHAKE_REQ_PACKET:
-                handleHandshakeReqPacket(msg, ctx);
-                break;
-            case GENERIC_OK_PACKET:
-                handleOKPacket(msg, ctx);
                 break;
             default:
                 decodeSwitch.setNextPacketType(PacketType.BINLOG_SWITCHER);
@@ -110,7 +110,7 @@ public class GenericHandler extends ChannelInboundHandlerAdapter {
     }
 
     /**
-     * 响应 HandshakeReqPacket
+     * 响应 HandshakeReqPacket，提供账号密码验证身份
      * @param msg   HandshakeReqPacket
      * @param ctx   channel
      */
@@ -119,7 +119,10 @@ public class GenericHandler extends ChannelInboundHandlerAdapter {
         decodeSwitch.setNextAction(DecodeAction.CLOSE_CHECKSUM);
         HandshakeReqPacket handshakeReqPacket = (HandshakeReqPacket) msg;
         byte[] authResponse = AuthUtil.nativePassword(thiefConfiguration.getPassword().getBytes(), handshakeReqPacket.getAuthPluginData());
-        HandshakeRespPacket handshakePacket = new HandshakeRespPacket(new PacketHeader((byte) (handshakeReqPacket.getPacketHeader().getSequenceId() + 1)),
+        // 序列号 +1
+        byte seq = (byte) (handshakeReqPacket.getPacketHeader().getSequenceId() + 1);
+        PacketHeader packetHeader = new PacketHeader(seq);
+        HandshakeRespPacket handshakePacket = new HandshakeRespPacket(packetHeader,
                 thiefConfiguration.getUsername().getBytes(), authResponse);
         ctx.writeAndFlush(handshakePacket);
     }
@@ -151,21 +154,33 @@ public class GenericHandler extends ChannelInboundHandlerAdapter {
      */
     private void handleOKPacket(Object msg, ChannelHandlerContext ctx){
         if (decodeSwitch.getNextAction() == DecodeAction.CLOSE_CHECKSUM){
+            // #2，服务端握手成功之后，先关闭 checksum 的功能
             decodeSwitch.setNextPacketType(PacketType.GENERIC_OK_PACKET);
             decodeSwitch.setNextAction(DecodeAction.REGISTER_SLAVE);
-            ComQueryPacket comQueryPacket = new ComQueryPacket(new PacketHeader(0), "set @master_binlog_checksum=@@global.binlog_checksum");
+
+            PacketHeader packetHeader = new PacketHeader(0);
+            String command = "set @master_binlog_checksum=@@global.binlog_checksum";
+            ComQueryPacket comQueryPacket = new ComQueryPacket(packetHeader, command);
+
             ctx.writeAndFlush(comQueryPacket);
         } else if (decodeSwitch.getNextAction() == DecodeAction.REGISTER_SLAVE){
+            // #3，向服务端注册成为从节点
             decodeSwitch.setNextPacketType(PacketType.CONNECT_SWITCHER);
             decodeSwitch.setNextAction(DecodeAction.BINLOG_DUMP);
-            RegisterSlavePacket registerSlavePacket = new RegisterSlavePacket(new PacketHeader(0), 65535);
+
+            PacketHeader packetHeader = new PacketHeader(0);
+            RegisterSlavePacket registerSlavePacket = new RegisterSlavePacket(packetHeader, 65535);
+
             ctx.writeAndFlush(registerSlavePacket);
         } else if (decodeSwitch.getNextAction() == DecodeAction.BINLOG_DUMP){
+            // #4，发送 binlog dump 命令，请求 binlog stream
             decodeSwitch.setNextPacketType(PacketType.BINLOG_SWITCHER);
             decodeSwitch.setNextAction(DecodeAction.NONE);
-            BinlogDumpPacket binlogDumpPacket =
-                    new BinlogDumpPacket(new PacketHeader(0), ByteUtil.intToBytes(thiefConfiguration.getBinlogStartPos().intValue()),
-                    65535, thiefConfiguration.getBinlogFilename());
+
+            PacketHeader packetHeader = new PacketHeader(0);
+            byte[] binlogPos = ByteUtil.intToBytes(thiefConfiguration.getBinlogStartPos().intValue());
+            BinlogDumpPacket binlogDumpPacket = new BinlogDumpPacket(packetHeader, binlogPos, 65535, thiefConfiguration.getBinlogFilename());
+
             ctx.writeAndFlush(binlogDumpPacket);
         }
     }

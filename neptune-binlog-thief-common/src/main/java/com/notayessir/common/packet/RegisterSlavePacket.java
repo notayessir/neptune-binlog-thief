@@ -3,6 +3,9 @@ package com.notayessir.common.packet;
 
 import com.notayessir.common.util.ByteUtil;
 
+/**
+ * 注册成为子节点数据帧
+ */
 public class RegisterSlavePacket extends Packet implements Computable {
 
     private final byte registerSlave;

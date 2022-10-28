@@ -1,6 +1,8 @@
 package com.notayessir.common.packet;
 
-
+/**
+ * 通用的 sql 数据帧，例如 select 等 sql 语句
+ */
 public class ComQueryPacket extends Packet implements Computable {
 
 

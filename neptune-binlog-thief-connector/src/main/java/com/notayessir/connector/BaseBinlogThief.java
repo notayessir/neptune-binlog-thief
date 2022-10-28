@@ -7,6 +7,8 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
@@ -15,6 +17,9 @@ import java.util.Objects;
  * 基础 binlog slave 实现
  */
 public class BaseBinlogThief implements BinlogThief {
+
+
+    private static final Logger LOG = LoggerFactory.getLogger(BaseBinlogThief.class);
 
     private final ThiefConfiguration thiefConfiguration;
 
@@ -38,6 +43,7 @@ public class BaseBinlogThief implements BinlogThief {
                     .connect(thiefConfiguration.getHost(), thiefConfiguration.getPort())
                     .sync();
         } catch (InterruptedException e) {
+            LOG.info("fail to connect to mysql, ex:", e);
             e.printStackTrace();
         }
 //        channelFuture.channel().closeFuture().sync();

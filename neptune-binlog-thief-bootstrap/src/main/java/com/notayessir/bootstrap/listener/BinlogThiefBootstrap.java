@@ -20,7 +20,8 @@ import java.util.Objects;
 
 
 /**
- * 根据 application.properties 配置启动 binlog 订阅
+ * 根据 application.properties 配置启动 binlog 订阅，
+ * 继承 CommandLineRunner 是想当整个应用初始化完成之后（bean 已经初始化完成），才开始启动 binlog
  */
 @Component
 public class BinlogThiefBootstrap implements CommandLineRunner {

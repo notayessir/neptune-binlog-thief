@@ -49,12 +49,12 @@ public class BinlogEventNotifier {
         // do process
         PacketType packetType = packet.getPacketType();
         PacketHandler packetHandler = getPacketHandler(packetType);
+
         packetHandler.beforeHandle(packet);
         if (packetHandler.skipHandle(packet, appConfiguration)){
             return;
         }
         packetHandler.handle(packet);
-
         afterProcess(packet);
 
     }

@@ -29,6 +29,7 @@ public class GenericInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast("decoder", new GenericDecoder(decodeSwitch));
         // 入栈处理器
         pipeline.addLast("handler", genericHandler);
+        // TODO 心跳保活
 
     }
 }

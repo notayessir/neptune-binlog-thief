@@ -1,9 +1,19 @@
 package com.notayessir.common.packet;
 
+/**
+ * 数据帧包装类，仅仅是封装数据帧，并带一些判断方法
+ * @param <P>   数据帧类型
+ */
 public class PacketWrapper<P> {
 
+    /**
+     * 数据帧
+     */
     private P packet;
 
+    /**
+     * 字节长度是否完整能组成数据帧
+     */
     private boolean completed;
 
 

@@ -39,6 +39,7 @@ public class BinlogSwitcherDecoder extends AbsPacketDecoder<Object> {
         in.skipBytes(4);
         int eventType = Byte.toUnsignedInt(in.readByte());
         in.readerIndex(rIndex);
+        // 根据数据帧细分类型，选择对应的解码器
         PacketType type = PacketType.getByVal(eventType);
         packetDecoder = getPacketDecoder(type);
         return (PacketWrapper<Object>) packetDecoder.decode(in);
