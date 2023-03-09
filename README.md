@@ -1,13 +1,15 @@
 ## 介绍
 
-![architecture](https://github.com/notayessir/neptune-binlog-thief/blob/master/asset/architecture.png)
+增量订阅 MySQL binlog 日志，将更新、插入、删除事件生产到常用的消息中间件如 Redis、Rocket MQ、Kafka 队列；
 
-增量订阅 MySQL binlog 日志，并将事件生产到常用的中间件；基于 Java 8，MySQL 版本 >= 5.7；
+框架总览：
+
+![architecture](https://github.com/notayessir/neptune-binlog-thief/blob/master/asset/architecture.png)
 
 功能点：
 
-1. 能够订阅 MySQL 5.7 以上的 binlog 事件；
-2. 实现了日志推送到 Redis、Rocket MQ、Kafka；
+1. 能够订阅 MySQL 5.7 以上的 binlog 事件，项目基于 Java 8；
+2. 支持将变更事件生产到 Redis、Rocket MQ、Kafka 等中间件；
 3. 使用 Raft 协议实现高可用，基于 Apache Ratis；
 
 ## 快速开始
@@ -32,7 +34,7 @@ mysql> GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO 'binlog_thi
 配置 application.properties：
 
 ```
-spring.datasource.url=jdbc:mysql://localhost:3306/{arbitrary_database}
+spring.datasource.url=jdbc:mysql://{{database-host}}:{{database-port}}/{{arbitrary_database}}
 spring.datasource.username=binlog_thief
 spring.datasource.password=xxxxx
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
@@ -198,7 +200,7 @@ JSON：
 # MySQL 服务器，任意填一个数据库
 spring.datasource.url=jdbc:mysql://localhost:3306/binlog_data
 # 用户名
-spring.datasource.username=maxwell
+spring.datasource.username=binlog_thief
 # 密码
 spring.datasource.password=123456
 # MySQL 驱动
@@ -208,9 +210,9 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 ### binlog
 
 ```
-# 起始 binlog 文件，不填则按照当前数据库所在位置
+# 起始 binlog 文件，不填则按照当前数据库最新数据所在位置
 app.binlog.filename=binlog.000028
-# 起始 binlog 位置，不填则按照当前数据库所在位置
+# 起始 binlog 位置，不填则按照当前数据库最新数据所在位置
 app.binlog.start.pos=426321
 ```
 
